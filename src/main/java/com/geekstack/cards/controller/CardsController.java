@@ -33,8 +33,9 @@ public class CardsController {
     // http//localhost:8080/
     @GetMapping()
     public String welcome() {
-        return "Hi this is Geekstack API";
+        return "Hi this is Geekstack API\n The api is still a work in progress with minimal functions";
     }
+
 
     // http//localhost:8080/unionarena
     // put ?q to search by cardname, ?priceYytIdd for price_yyt_id, ?priceFullaId for price_fulla_id, ?cardUid for cardUid
