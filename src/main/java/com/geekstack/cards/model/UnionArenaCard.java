@@ -2,7 +2,9 @@ package com.geekstack.cards.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,16 +18,26 @@ public class UnionArenaCard {
 
     @Id
     private ObjectId _id;
+
+    @Field("anime")
     private String anime;
     private int apcost;
     private int banRatio;
     private String banWith;
     private String basicpower;
+
+    @Field("booster")
     private String booster;
     private String cardId;
+
+    @Field("cardUid")
     private String cardUid;
     private String cardName;
+
+    @Field("cardNameLower")
+    @TextIndexed
     private String cardNameLower;
+    
     private String category;
     private String color;
     private String effect;
@@ -39,7 +51,11 @@ public class UnionArenaCard {
     private String urlimage;
     private String rarityAct;
     private String cardcode;
-    private String price_yyt_id;
-    private String price_fulla_id;
+
+    @Field("price_yyt_id")
+    private String priceYytId;
+
+    @Field("price_fulla_id")
+    private String priceFullaId;
     
 }
