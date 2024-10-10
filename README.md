@@ -1,1 +1,4 @@
-This is a work in progress API for Geekstack
+WORK IN PROGRESS
+
+
+A mini project where I use Springboot to build RESTful API for www.geekstack.dev
