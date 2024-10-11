@@ -1,6 +1,8 @@
 package com.geekstack.cards.repository;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -14,15 +16,15 @@ import java.util.List;
 public interface UnionArenaRepository extends MongoRepository<UnionArenaCard, ObjectId> {
 
     @Query("{ 'anime': ?0, 'rarity': { $regex: ?1 }, 'color': { $regex: ?2 }, 'triggerState': { $regex: ?3 }, 'booster' : { $regex: ?4}, 'priceYytId' : ?5 }")
-    List<UnionArenaCard> findByFilters(String anime, String rarity, String color, String triggerState, String booster, String priceYytId);
+    Page<UnionArenaCard> findByFilters(String anime, String rarity, String color, String triggerState, String booster, String priceYytId, Pageable pageable);
 
-    List<UnionArenaCard> findAllBy(TextCriteria criteria);
+    Page<UnionArenaCard> findAllBy(TextCriteria criteria, Pageable pageable);
 
-    List<UnionArenaCard> findAllByPriceYytId(String priceYytId);
+    Page<UnionArenaCard> findAllByPriceYytId(String priceYytId, Pageable pageable);
 
-    List<UnionArenaCard> findAllByPriceFullaId(String priceFullaId);
+    Page<UnionArenaCard> findAllByPriceFullaId(String priceFullaId, Pageable pageable);
 
-    List<UnionArenaCard> findAllByCardUid(String cardUid);
+    Page<UnionArenaCard> findAllByCardUid(String cardUid, Pageable pageable);
     
-    List<UnionArenaCard> findByAnime(String anime);
+    Page<UnionArenaCard> findByAnime(String anime, Pageable pageable);
 }
