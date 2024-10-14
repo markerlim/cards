@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.geekstack.cards.model.UnionArenaCard;
 
-import java.util.List;
-
 @Repository
 public interface UnionArenaRepository extends MongoRepository<UnionArenaCard, ObjectId> {
 

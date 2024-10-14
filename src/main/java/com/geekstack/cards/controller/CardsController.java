@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,9 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.geekstack.cards.model.CardPriceFULLA;
 import com.geekstack.cards.model.CardPriceYYT;
+import com.geekstack.cards.model.DragonBallzFWCard;
+import com.geekstack.cards.model.OnePieceCard;
 import com.geekstack.cards.model.UnionArenaBooster;
 import com.geekstack.cards.model.UnionArenaCard;
+import com.geekstack.cards.service.DragonBallzFWService;
 import com.geekstack.cards.service.FullaheadService;
+import com.geekstack.cards.service.OnePieceService;
 import com.geekstack.cards.service.UABoosterService;
 import com.geekstack.cards.service.UnionArenaService;
 import com.geekstack.cards.service.YuyuteiService;
@@ -38,6 +43,10 @@ public class CardsController {
     private FullaheadService fullaheadService;
     @Autowired
     private UABoosterService uaBoosterService;
+    @Autowired
+    private OnePieceService onePieceService;
+    @Autowired
+    private DragonBallzFWService dragonBallzFWService;
 
     // http//localhost:8080/
     @GetMapping()
@@ -58,7 +67,8 @@ public class CardsController {
             @RequestParam(defaultValue = "10") int size) {
 
         // Create a Pageable object for pagination
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size,
+                Sort.by("booster").ascending().and(Sort.by("cardUid").ascending()));
         Page<UnionArenaCard> pagedCards;
 
         // Perform filtering based on the presence of query parameters
@@ -82,6 +92,24 @@ public class CardsController {
         return new ResponseEntity<>(pagedCards, HttpStatus.OK);
     }
 
+    // http//localhost:8080/uabooster
+    @GetMapping("/data/unionarena")
+    public ResponseEntity<List<UnionArenaCard>> getAllUnionArenaNoPage() {
+        return new ResponseEntity<List<UnionArenaCard>>(unionArenaService.allUnionArenaNoPage(), HttpStatus.OK);
+    }
+
+    // http//localhost:8080/uabooster
+    @GetMapping("/data/onepiece")
+    public ResponseEntity<List<OnePieceCard>> allOnePiecePage() {
+        return new ResponseEntity<List<OnePieceCard>>(onePieceService.allOnePiecePage(), HttpStatus.OK);
+    }
+
+    // http//localhost:8080/uabooster
+    @GetMapping("/data/dragonballzfw")
+    public ResponseEntity<List<DragonBallzFWCard>> allDragonBallzFWPage() {
+        return new ResponseEntity<List<DragonBallzFWCard>>(dragonBallzFWService.allDragonballzFWPage(), HttpStatus.OK);
+    }
+
     // http//localhost:8080/unionarena/anime?rarity={rarity}&color={color}&triggerState={triggerState}&booster={booster}
     // can remove fields that are not needed
     @GetMapping("/unionarena/{anime}")
@@ -95,7 +123,8 @@ public class CardsController {
             @RequestParam(defaultValue = "10") int size) {
 
         // Create a Pageable object for pagination
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size,
+                Sort.by("booster").ascending().and(Sort.by("cardUid").ascending()));
         Page<UnionArenaCard> pagedCards;
         pagedCards = unionArenaService.findCardByAnime(anime, rarity, color, triggerState, booster,
                 priceYytId, pageable);

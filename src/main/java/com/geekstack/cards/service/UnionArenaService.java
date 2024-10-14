@@ -1,16 +1,16 @@
 package com.geekstack.cards.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Service;
 
 import com.geekstack.cards.model.UnionArenaCard;
 import com.geekstack.cards.repository.UnionArenaRepository;
-
-import java.util.List;
 
 @Service
 public class UnionArenaService {
@@ -22,6 +22,12 @@ public class UnionArenaService {
 
         return unionArenaRepository.findAll(pageable);
 
+    }
+
+    public List<UnionArenaCard> allUnionArenaNoPage() {
+        // Define sorting by booster and cardUid
+        Sort sort = Sort.by("booster").ascending().and(Sort.by("cardUid").ascending());
+        return unionArenaRepository.findAll(sort);  // Fetch all sorted records from the repository
     }
 
     public Page<UnionArenaCard> searchUnionArenaByText(String searchTerm, Pageable pageable) {
