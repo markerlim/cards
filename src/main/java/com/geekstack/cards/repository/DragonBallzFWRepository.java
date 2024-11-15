@@ -10,8 +10,12 @@ import org.springframework.stereotype.Repository;
 import com.geekstack.cards.model.DragonBallzFWCard;
 
 @Repository
-public interface DragonBallzFWRepository extends MongoRepository<DragonBallzFWCard, ObjectId>  {
+public interface DragonBallzFWRepository extends MongoRepository<DragonBallzFWCard, ObjectId> {
 
     Page<DragonBallzFWCard> findAllBy(TextCriteria criteria, Pageable pageable);
-}
 
+    Page<DragonBallzFWCard> findAllByCardUid(String cardUid, Pageable pageable);
+
+    Page<DragonBallzFWCard> findByBooster(String booster, Pageable pageable);
+
+}

@@ -12,6 +12,10 @@ import com.geekstack.cards.model.OnePieceCard;
 @Repository
 public interface OnePieceRepository extends MongoRepository<OnePieceCard, ObjectId> {
 
-        Page<OnePieceCard> findAllBy(TextCriteria criteria, Pageable pageable);
+    Page<OnePieceCard> findAllBy(TextCriteria criteria, Pageable pageable);
+
+    Page<OnePieceCard> findAllByCardUid(String cardUid, Pageable pageable);
+
+    Page<OnePieceCard> findByBooster(String booster, Pageable pageable);
 
 }

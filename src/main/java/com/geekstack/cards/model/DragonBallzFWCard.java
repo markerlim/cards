@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "dragonballzfw")
+@Document(collection = "CL_dragonballzfw")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,6 +30,7 @@ public class DragonBallzFWCard {
     @Field("cardNameLower")
     @TextIndexed
     private String cardNameLower;
+    
     private String cardtype;
     private String color;
     private String combopower;

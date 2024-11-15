@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "unionarena")
+@Document(collection = "CL_unionarena")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

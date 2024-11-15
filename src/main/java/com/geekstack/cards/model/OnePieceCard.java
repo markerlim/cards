@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "onepiece")
+@Document(collection = "CL_onepiece")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,6 +27,7 @@ public class OnePieceCard {
     @Field("cardname_lower")
     @TextIndexed
     private String cardname_lower;
+    
     private String cardId;
 
     @Field("cardUid")
