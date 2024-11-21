@@ -15,13 +15,11 @@ import com.geekstack.cards.model.CardPriceYYT;
 import com.geekstack.cards.model.DragonBallzFWCard;
 import com.geekstack.cards.model.HololiveCard;
 import com.geekstack.cards.model.OnePieceCard;
-import com.geekstack.cards.model.UnionArenaBooster;
 import com.geekstack.cards.model.UnionArenaCard;
 import com.geekstack.cards.service.DragonBallzFWService;
 import com.geekstack.cards.service.FullaheadService;
 import com.geekstack.cards.service.HololiveService;
 import com.geekstack.cards.service.OnePieceService;
-import com.geekstack.cards.service.UABoosterService;
 import com.geekstack.cards.service.UnionArenaService;
 import com.geekstack.cards.service.YuyuteiService;
 
@@ -39,8 +37,6 @@ public class CardsController {
     private YuyuteiService yuyuteiService;
     @Autowired
     private FullaheadService fullaheadService;
-    @Autowired
-    private UABoosterService uaBoosterService;
     @Autowired
     private OnePieceService onePieceService;
     @Autowired
@@ -79,13 +75,6 @@ public class CardsController {
     @GetMapping("/data/hololive")
     public ResponseEntity<List<HololiveCard>> allHololivePage(){
         return new ResponseEntity<List<HololiveCard>>(hololiveService.allHololivePage(),HttpStatus.OK);
-    }
-
-    // http//localhost:8080/uabooster
-    @ResponseBody
-    @GetMapping("/uabooster")
-    public ResponseEntity<List<UnionArenaBooster>> getAllUABooster() {
-        return new ResponseEntity<List<UnionArenaBooster>>(uaBoosterService.allBooster(), HttpStatus.OK);
     }
 
     // http//localhost:8080/yyt
