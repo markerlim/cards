@@ -43,7 +43,6 @@ public class DragonBallzFWService {
     }
 
     public Page<DragonBallzFWCard> findAllByCardUid(String cardUid, Pageable pageable) {
-        // Find cards by priceFullaId only
         return dragonBallzFWRepository.findAllByCardUid(cardUid, pageable);
     }
 

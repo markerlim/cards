@@ -26,7 +26,7 @@ public class DragonballzfwController {
     private DragonBallzFWService dragonBallzFWService;
 
      @GetMapping("")
-    public ResponseEntity<Page<DragonBallzFWCard>> getAllOnePiece(
+    public ResponseEntity<Page<DragonBallzFWCard>> getAllDragonballzfw(
             @RequestParam(value = "q", required = false) String query,
             @RequestParam(value = "cardUid", required = false) String cardUid,
             @RequestParam(defaultValue = "0") int page,
@@ -54,7 +54,7 @@ public class DragonballzfwController {
     }
 
     @GetMapping("/{booster}")
-    public ResponseEntity<Page<DragonBallzFWCard>> getAllOPByBooster(
+    public ResponseEntity<Page<DragonBallzFWCard>> getAllDragonballzfwByBooster(
         @PathVariable String booster,
         @RequestParam(value = "cardtype", required = false) String cardtype,
         @RequestParam(value = "color", required = false) String colorLower,

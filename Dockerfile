@@ -25,7 +25,7 @@ RUN chmod +x mvnw
 RUN ./mvnw package -Dmaven.test.skip=true
 
 # Set the server port
-ENV SERVER_PORT=8888
+ENV SERVER_PORT=8080
 
 # Expose the port
 EXPOSE ${SERVER_PORT}

@@ -1,6 +1,7 @@
 package com.geekstack.cards.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.geekstack.cards.model.BoosterButton;
+import com.geekstack.cards.model.FiltersButton;
 import com.geekstack.cards.model.UnionArenaBooster;
 import com.geekstack.cards.service.BoosterListService;
+import com.geekstack.cards.service.FiltersButtonService;
 import com.geekstack.cards.service.UABoosterService;
 
-@CrossOrigin(origins = { "http://localhost:4200", "http://localhost:8080", "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:4200", "http://localhost:8080", "http://localhost:3000", "https://geekstack.dev" })
 @RestController
 @RequestMapping("/api/boosterlist")
 public class BoosterController {
@@ -25,6 +28,8 @@ public class BoosterController {
     private UABoosterService uaBoosterService;
     @Autowired
     private BoosterListService boosterListService;
+    @Autowired
+    private FiltersButtonService filtersButtonService;
 
 
     @GetMapping("/{tcg}")
@@ -36,6 +41,11 @@ public class BoosterController {
     public ResponseEntity<List<UnionArenaBooster>> getAllUABooster(@PathVariable String animecode) {
         
         return new ResponseEntity<List<UnionArenaBooster>>(uaBoosterService.allBooster(), HttpStatus.OK);
+    }
+
+    @GetMapping("/filters/{param}")
+    public ResponseEntity<Optional<FiltersButton>> getFilters(@PathVariable String param){
+        return new ResponseEntity<Optional<FiltersButton>>(filtersButtonService.findByParam(param),HttpStatus.OK);
     }
 
 }

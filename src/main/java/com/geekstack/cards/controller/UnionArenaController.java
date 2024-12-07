@@ -25,7 +25,7 @@ public class UnionArenaController {
     @Autowired
     private UnionArenaService unionArenaService;
 
-        // http//localhost:8080/unionarena
+    // http//localhost:8080/unionarena
     // put ?q to search by cardname, ?priceYytIdd for price_yyt_id, ?priceFullaId
     // for price_fulla_id, ?cardUid for cardUid
     @GetMapping("")

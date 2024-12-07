@@ -1,5 +1,6 @@
 package com.geekstack.cards.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -7,31 +8,42 @@ import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
-public class JedisConfig {
+public class RedisConfig {
 
+        
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.data.redis.port}")
+    private int redisPort;
+
+    @Value("${spring.data.redis.username}")
+    private String redisUsername;
+
+    @Value("${spring.data.redis.password}")
+    private String redisPassword;
+    
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
-        redisConfig.setHostName("localhost");  
-        redisConfig.setPort(6379);             
+        RedisStandaloneConfiguration rsc = new RedisStandaloneConfiguration();
+        rsc.setHostName(redisHost);  
+        rsc.setPort(redisPort);       
+        
+        if(redisUsername.trim().length()>0){
+            rsc.setUsername(redisUsername);
+            rsc.setPassword(redisPassword);
+        }
 
-        JedisPoolConfig poolConfig = new JedisPoolConfig();
-        poolConfig.setMaxTotal(10);            
-        poolConfig.setMaxIdle(5);              
-        poolConfig.setMinIdle(1);             
-        poolConfig.setTestOnBorrow(true);
+        JedisClientConfiguration jcc = JedisClientConfiguration.builder().build();
+        JedisConnectionFactory jcf = new JedisConnectionFactory(rsc, jcc);
+        jcf.afterPropertiesSet();
 
-        // Combine configuration into Jedis connection factory
-        JedisClientConfiguration clientConfig = JedisClientConfiguration.builder()
-                .usePooling().poolConfig(poolConfig).build();
-
-        return new JedisConnectionFactory(redisConfig, clientConfig);
+        return jcf;
     }
 
-    @Bean
+    @Bean("redis-deck")
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(jedisConnectionFactory());
