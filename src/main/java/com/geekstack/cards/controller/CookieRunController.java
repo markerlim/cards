@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,7 @@ public class CookieRunController {
     private CookieRunService cookieRunService;
 
     @GetMapping("")
-    public ResponseEntity<Page<CookieRunCard>> getAllDragonballzfw(
+    public ResponseEntity<Page<CookieRunCard>> getAllCookieRun(
             @RequestParam(value = "q", required = false) String query,
             @RequestParam(value = "cardNo", required = false) String cardNo,
             @RequestParam(defaultValue = "0") int page,
@@ -52,4 +53,27 @@ public class CookieRunController {
         return new ResponseEntity<>(pagedCards, HttpStatus.OK);
     }
 
+        @GetMapping("/{boostercode}")
+    public ResponseEntity<Page<CookieRunCard>> getAllDragonballzfwByBooster(
+        @PathVariable String boostercode,
+        @RequestParam(value = "cardType", required = false) String cardType,
+        @RequestParam(value = "energyType", required = false) String energyType,
+        @RequestParam(value = "rarity", required = false) String rarity,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "20") int size){
+        
+        Pageable pageable = PageRequest.of(page, size,
+                Sort.by("boostercode").ascending().and(Sort.by("cardNo").ascending()));
+
+        Page<CookieRunCard> pagedCards;
+
+        if (cardType != null || energyType != null || rarity != null) {
+            pagedCards = cookieRunService.findByBoosterAndFilter(boostercode, cardType, rarity, energyType, pageable);
+        } else {
+            pagedCards = cookieRunService.findByBoostercode(boostercode, pageable);
+        }
+
+        return new ResponseEntity<>(pagedCards, HttpStatus.OK);   
+
+    }
 }
