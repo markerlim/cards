@@ -16,6 +16,6 @@ public interface CookieRunRepository extends MongoRepository<CookieRunCard, Obje
 
     Page<CookieRunCard> findByBoostercode(String boostercode, Pageable pageable);
     
-    Page<CookieRunCard> findAllByCardNo(String cardNo, Pageable pageable);
+    Page<CookieRunCard> findAllByCardUid(String cardUid, Pageable pageable);
 
 }

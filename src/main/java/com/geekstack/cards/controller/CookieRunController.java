@@ -28,13 +28,13 @@ public class CookieRunController {
     @GetMapping("")
     public ResponseEntity<Page<CookieRunCard>> getAllCookieRun(
             @RequestParam(value = "q", required = false) String query,
-            @RequestParam(value = "cardNo", required = false) String cardNo,
+            @RequestParam(value = "cardUid", required = false) String cardUid,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
 
         // Create a Pageable object for pagination
         Pageable pageable = PageRequest.of(page, size,
-                Sort.by("boostercode").ascending().and(Sort.by("field_cardNo_suyeowsc").ascending()));
+                Sort.by("boostercode").ascending().and(Sort.by("cardUid").ascending()));
         Page<CookieRunCard> pagedCards;
 
         // Perform filtering based on the presence of query parameters
@@ -42,8 +42,8 @@ public class CookieRunController {
             // Perform full-text search using the query parameter
             pagedCards = cookieRunService.searchCookieRunByText(query, pageable);
         } else {
-            if (cardNo != null && !cardNo.isEmpty()) {
-                pagedCards = cookieRunService.findAllByCardNo(cardNo, pageable);
+            if (cardUid != null && !cardUid.isEmpty()) {
+                pagedCards = cookieRunService.findAllByCardUid(cardUid, pageable);
             } else {
                 // No filters, return all cards with pagination
                 pagedCards = cookieRunService.allCookieRun(pageable);

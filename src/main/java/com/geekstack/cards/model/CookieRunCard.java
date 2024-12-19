@@ -36,8 +36,12 @@ public class CookieRunCard {
     @Field("field_hp_zbxcocvx")
     private String hp;
 
-    @Field("field_cardNo_suyeowsc")
-    private String cardNo;
+    @Field("cardUid")
+    private String cardUid;
+
+    @Field("cardId")
+    private String cardId;
+
 
     @Field("field_grade")
     private String grade;
@@ -63,10 +67,9 @@ public class CookieRunCard {
     }
 
     public CookieRunCard(ObjectId _id, int id, int elementId, String title, String artistTitle, String productTitle,
-                         String cardDescription, String rarity, String hp, String cardNo, String grade,
-                         String urlimage, String productCategory, String productCategoryTitle, String cardType,
-                         String cardTypeTitle, String energyType, String energyTypeTitle, String cardLevel,
-                         String cardLevelTitle, String boostercode) {
+            String cardDescription, String rarity, String hp, String cardUid, String cardId, String grade,
+            String urlimage, String productCategory, String productCategoryTitle, String cardType, String cardTypeTitle,
+            String energyType, String energyTypeTitle, String cardLevel, String cardLevelTitle, String boostercode) {
         this._id = _id;
         this.id = id;
         this.elementId = elementId;
@@ -76,7 +79,8 @@ public class CookieRunCard {
         this.cardDescription = cardDescription;
         this.rarity = rarity;
         this.hp = hp;
-        this.cardNo = cardNo;
+        this.cardUid = cardUid;
+        this.cardId = cardId;
         this.grade = grade;
         this.urlimage = urlimage;
         this.productCategory = productCategory;
@@ -89,6 +93,7 @@ public class CookieRunCard {
         this.cardLevelTitle = cardLevelTitle;
         this.boostercode = boostercode;
     }
+
 
     public ObjectId get_id() {
         return _id;
@@ -162,13 +167,24 @@ public class CookieRunCard {
         this.hp = hp;
     }
 
-    public String getCardNo() {
-        return cardNo;
+
+    public String getCardUid() {
+        return cardUid;
     }
 
-    public void setCardNo(String cardNo) {
-        this.cardNo = cardNo;
+    public void setCardUid(String cardUid) {
+        this.cardUid = cardUid;
     }
+
+    public String getCardId() {
+        return cardId;
+    }
+
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
+
 
     public String getGrade() {
         return grade;

@@ -39,8 +39,8 @@ public class CookieRunService {
         return cookieRunRepository.findAllBy(criteria, pageable);
     }
 
-    public Page<CookieRunCard> findAllByCardNo(String cardNo, Pageable pageable) {
-        return cookieRunRepository.findAllByCardNo(cardNo, pageable);
+    public Page<CookieRunCard> findAllByCardUid(String cardUid, Pageable pageable) {
+        return cookieRunRepository.findAllByCardUid(cardUid, pageable);
     }
 
     public Page<CookieRunCard> findByBoostercode(String boostercode, Pageable pageable) {
