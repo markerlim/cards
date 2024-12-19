@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.geekstack.cards.model.CookieRunCard;
 import com.geekstack.cards.service.CookieRunService;
 
-@CrossOrigin(origins = { "http://localhost:4200", "http://localhost:8080", "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:4200", "http://localhost:8080", "http://localhost:3000", "https://geekstack.dev" })
 @RestController
-@RequestMapping("/api/cookirunbraverse")
+@RequestMapping("/api/cookierunbraverse")
 public class CookieRunController {
 
     @Autowired
@@ -53,15 +53,15 @@ public class CookieRunController {
         return new ResponseEntity<>(pagedCards, HttpStatus.OK);
     }
 
-        @GetMapping("/{boostercode}")
+    @GetMapping("/{boostercode}")
     public ResponseEntity<Page<CookieRunCard>> getAllDragonballzfwByBooster(
-        @PathVariable String boostercode,
-        @RequestParam(value = "cardType", required = false) String cardType,
-        @RequestParam(value = "energyType", required = false) String energyType,
-        @RequestParam(value = "rarity", required = false) String rarity,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "20") int size){
-        
+            @PathVariable String boostercode,
+            @RequestParam(value = "cardType", required = false) String cardType,
+            @RequestParam(value = "energyType", required = false) String energyType,
+            @RequestParam(value = "rarity", required = false) String rarity,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
         Pageable pageable = PageRequest.of(page, size,
                 Sort.by("boostercode").ascending().and(Sort.by("cardNo").ascending()));
 
@@ -73,7 +73,7 @@ public class CookieRunController {
             pagedCards = cookieRunService.findByBoostercode(boostercode, pageable);
         }
 
-        return new ResponseEntity<>(pagedCards, HttpStatus.OK);   
+        return new ResponseEntity<>(pagedCards, HttpStatus.OK);
 
     }
 }

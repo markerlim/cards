@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Service;
 
 import com.geekstack.cards.model.CookieRunCard;
-import com.geekstack.cards.model.DragonBallzFWCard;
 import com.geekstack.cards.repository.CookieRunRepository;
 
 @Service
@@ -68,7 +67,6 @@ public class CookieRunService {
             query.addCriteria(Criteria.where("energyType").is(energyType));
         }
 
-        // Execute the query
         List<CookieRunCard> filteredCards = mongoTemplate.find(query, CookieRunCard.class);
         long count = mongoTemplate.count(query.skip(-1).limit(-1), CookieRunCard.class);
 

@@ -42,8 +42,8 @@ public class CookieRunCard {
     @Field("field_grade")
     private String grade;
 
-    @Field("cardImage")
-    private String cardImage;
+    @Field("urlimage")
+    private String urlimage;
 
     private String productCategory;
     private String productCategoryTitle;
@@ -64,7 +64,7 @@ public class CookieRunCard {
 
     public CookieRunCard(ObjectId _id, int id, int elementId, String title, String artistTitle, String productTitle,
                          String cardDescription, String rarity, String hp, String cardNo, String grade,
-                         String cardImage, String productCategory, String productCategoryTitle, String cardType,
+                         String urlimage, String productCategory, String productCategoryTitle, String cardType,
                          String cardTypeTitle, String energyType, String energyTypeTitle, String cardLevel,
                          String cardLevelTitle, String boostercode) {
         this._id = _id;
@@ -78,7 +78,7 @@ public class CookieRunCard {
         this.hp = hp;
         this.cardNo = cardNo;
         this.grade = grade;
-        this.cardImage = cardImage;
+        this.urlimage = urlimage;
         this.productCategory = productCategory;
         this.productCategoryTitle = productCategoryTitle;
         this.cardType = cardType;
@@ -178,12 +178,12 @@ public class CookieRunCard {
         this.grade = grade;
     }
 
-    public String getCardImage() {
-        return cardImage;
+    public String getUrlimage() {
+        return urlimage;
     }
 
-    public void setCardImage(String cardImage) {
-        this.cardImage = cardImage;
+    public void setUrlimage(String urlimage) {
+        this.urlimage = urlimage;
     }
 
     public String getProductCategory() {
