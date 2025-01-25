@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "CL_unionarena")
+@Document(collection = "CL_unionarena_v2")
 public class UnionArenaCard {
 
     @Id
@@ -14,35 +14,42 @@ public class UnionArenaCard {
 
     @Field("anime")
     private String anime;
+
+    @Field("animeCode")
+    private String animeCode;
+
     private int apcost;
     private int banRatio;
-    private String banWith;
-    private String basicpower;
 
-    @Field("booster")
+    private String basicpower;
     private String booster;
     private String cardId;
-
-    @Field("cardUid")
     private String cardUid;
+
+    @Field("cardName")
+    @TextIndexed
     private String cardName;
 
-    @Field("cardNameLower")
-    @TextIndexed
-    private String cardNameLower;
-    
     private String category;
     private String color;
+
+    @TextIndexed
     private String effect;
     private int energycost;
     private String energygen;
     private String image;
+
+    @Field("rarity")
     private String rarity;
+
     private String traits;
     private String trigger;
     private String triggerState;
     private String urlimage;
+
+    @Field("rarityAct")
     private String rarityAct;
+
     private String cardcode;
 
     @Field("price_yyt_id")
@@ -51,26 +58,28 @@ public class UnionArenaCard {
     @Field("price_fulla_id")
     private String priceFullaId;
 
-    public UnionArenaCard(){
-        
+    private String YYT;
+    private String FULLA;
+
+    public UnionArenaCard() {
     }
 
-    public UnionArenaCard(ObjectId _id, String anime, int apcost, int banRatio, String banWith, String basicpower,
-            String booster, String cardId, String cardUid, String cardName, String cardNameLower, String category,
-            String color, String effect, int energycost, String energygen, String image, String rarity, String traits,
-            String trigger, String triggerState, String urlimage, String rarityAct, String cardcode, String priceYytId,
-            String priceFullaId) {
+    public UnionArenaCard(ObjectId _id, String anime, String animeCode, int apcost, int banRatio,
+            String basicpower, String booster, String cardId, String cardUid, String cardName,
+            String category, String color, String effect, int energycost,
+            String energygen, String image, String rarity, String traits,
+            String trigger, String triggerState, String urlimage, String rarityAct, String cardcode,
+            String priceYytId, String priceFullaId, String YYT, String FULLA) {
         this._id = _id;
         this.anime = anime;
+        this.animeCode = animeCode;
         this.apcost = apcost;
         this.banRatio = banRatio;
-        this.banWith = banWith;
         this.basicpower = basicpower;
         this.booster = booster;
         this.cardId = cardId;
         this.cardUid = cardUid;
         this.cardName = cardName;
-        this.cardNameLower = cardNameLower;
         this.category = category;
         this.color = color;
         this.effect = effect;
@@ -86,6 +95,8 @@ public class UnionArenaCard {
         this.cardcode = cardcode;
         this.priceYytId = priceYytId;
         this.priceFullaId = priceFullaId;
+        this.YYT = YYT;
+        this.FULLA = FULLA;
     }
 
     public ObjectId get_id() {
@@ -104,6 +115,14 @@ public class UnionArenaCard {
         this.anime = anime;
     }
 
+    public String getAnimeCode() {
+        return animeCode;
+    }
+
+    public void setAnimeCode(String animeCode) {
+        this.animeCode = animeCode;
+    }
+
     public int getApcost() {
         return apcost;
     }
@@ -118,14 +137,6 @@ public class UnionArenaCard {
 
     public void setBanRatio(int banRatio) {
         this.banRatio = banRatio;
-    }
-
-    public String getBanWith() {
-        return banWith;
-    }
-
-    public void setBanWith(String banWith) {
-        this.banWith = banWith;
     }
 
     public String getBasicpower() {
@@ -166,14 +177,6 @@ public class UnionArenaCard {
 
     public void setCardName(String cardName) {
         this.cardName = cardName;
-    }
-
-    public String getCardNameLower() {
-        return cardNameLower;
-    }
-
-    public void setCardNameLower(String cardNameLower) {
-        this.cardNameLower = cardNameLower;
     }
 
     public String getCategory() {
@@ -296,5 +299,20 @@ public class UnionArenaCard {
         this.priceFullaId = priceFullaId;
     }
 
+    public String getYYT() {
+        return YYT;
+    }
+
+    public void setYYT(String yYT) {
+        YYT = yYT;
+    }
+
+    public String getFULLA() {
+        return FULLA;
+    }
+
+    public void setFULLA(String fULLA) {
+        FULLA = fULLA;
+    }
 
 }

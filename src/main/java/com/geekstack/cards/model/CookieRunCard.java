@@ -61,7 +61,8 @@ public class CookieRunCard {
     private String cardLevel;
     private String cardLevelTitle;
 
-    private String boostercode;
+    @Field("booster")
+    private String booster;
 
     public CookieRunCard() {
     }
@@ -69,7 +70,7 @@ public class CookieRunCard {
     public CookieRunCard(ObjectId _id, int id, int elementId, String title, String artistTitle, String productTitle,
             String cardDescription, String rarity, String hp, String cardUid, String cardId, String grade,
             String urlimage, String productCategory, String productCategoryTitle, String cardType, String cardTypeTitle,
-            String energyType, String energyTypeTitle, String cardLevel, String cardLevelTitle, String boostercode) {
+            String energyType, String energyTypeTitle, String cardLevel, String cardLevelTitle, String booster) {
         this._id = _id;
         this.id = id;
         this.elementId = elementId;
@@ -91,7 +92,7 @@ public class CookieRunCard {
         this.energyTypeTitle = energyTypeTitle;
         this.cardLevel = cardLevel;
         this.cardLevelTitle = cardLevelTitle;
-        this.boostercode = boostercode;
+        this.booster = booster;
     }
 
 
@@ -266,12 +267,12 @@ public class CookieRunCard {
         this.cardLevelTitle = cardLevelTitle;
     }
 
-    public String getBoostercode() {
-        return boostercode;
+    public String getbooster() {
+        return booster;
     }
 
-    public void setBoostercode(String boostercode) {
-        this.boostercode = boostercode;
+    public void setbooster(String booster) {
+        this.booster = booster;
     }
 }
 

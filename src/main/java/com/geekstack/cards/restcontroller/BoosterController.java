@@ -1,4 +1,4 @@
-package com.geekstack.cards.controller;
+package com.geekstack.cards.restcontroller;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +16,7 @@ import com.geekstack.cards.model.BoosterButton;
 import com.geekstack.cards.model.FiltersButton;
 import com.geekstack.cards.model.UnionArenaBooster;
 import com.geekstack.cards.service.BoosterListService;
+import com.geekstack.cards.service.CardListService;
 import com.geekstack.cards.service.FiltersButtonService;
 import com.geekstack.cards.service.UABoosterService;
 
@@ -30,6 +31,8 @@ public class BoosterController {
     private BoosterListService boosterListService;
     @Autowired
     private FiltersButtonService filtersButtonService;
+    @Autowired
+    private CardListService cardListService;
 
 
     @GetMapping("/{tcg}")
@@ -48,4 +51,8 @@ public class BoosterController {
         return new ResponseEntity<Optional<FiltersButton>>(filtersButtonService.findByParam(param),HttpStatus.OK);
     }
 
+    @GetMapping("/duelmasters")
+    public ResponseEntity<List<String>> getDMList(){
+        return new ResponseEntity<List<String>>(cardListService.listofduelmaster().boosterFilters(),HttpStatus.OK);
+    }
 }
