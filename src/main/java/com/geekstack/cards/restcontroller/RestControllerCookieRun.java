@@ -16,7 +16,7 @@ import com.geekstack.cards.service.CardListService;
 
 @RestController
 @RequestMapping("/api/data/cookierunbraverse")
-@CrossOrigin(origins = { "http://localhost:4200", "http://localhost:8080", "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:4200", "http://localhost:8080", "http://localhost:3000", "https://geekstack.dev" })
 public class RestControllerCookieRun {
 
     @Autowired
