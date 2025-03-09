@@ -26,11 +26,13 @@ public class CL_OnePieceRepository {
 
     public List<OnePieceCard> getCardsByBooster(String booster) {
         Criteria criteria = Criteria.where(F_BOOSTER).is(booster);
+
         Query query = new Query(criteria);
 
         QuerySorting(query, F_CARDUID, true);
 
         List<OnePieceCard> results = mongoTemplate.find(query, OnePieceCard.class, C_ONEPIECE);
+
         return results;
     }
 
@@ -38,11 +40,12 @@ public class CL_OnePieceRepository {
         TextCriteria textCriteria = TextCriteria.forDefaultLanguage()
                 .matchingPhrase(term);
 
-        TextQuery textQuery = TextQuery.queryText(textCriteria);
+        TextQuery textQuery = new TextQuery(textCriteria);
 
-        TextQuerySorting(textQuery, F_BOOSTER, false, F_CARDUID, true);
+        TextQuerySorting(textQuery,F_BOOSTER,true ,F_CARDUID, true);
 
         List<OnePieceCard> results = mongoTemplate.find(textQuery, OnePieceCard.class, C_ONEPIECE);
+
         return results;
     }
 
@@ -51,7 +54,6 @@ public class CL_OnePieceRepository {
         Criteria criteria = Criteria.where(F_BOOSTER).is(booster);
         Query query = new Query(criteria);
         query.fields().include(F_CATEGORY);
-
 
         return mongoTemplate.findDistinct(query, F_CATEGORY, C_ONEPIECE, String.class);
     }

@@ -2,9 +2,6 @@ package com.geekstack.cards.repository;
 
 import java.util.List;
 
-import javax.sound.midi.Track;
-
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -31,7 +28,7 @@ public class CL_DuelMasterRepository {
         Criteria criteria = Criteria.where(F_BOOSTER).is(booster);
         Query query = new Query(criteria);
 
-        QuerySorting(query, F_CARDID, true);
+        QuerySorting(query, F_CARDUID, true);
 
         List<DuelMasterCard> results = mongoTemplate.find(query, DuelMasterCard.class, C_DUELMASTER);
         return results;
@@ -41,9 +38,9 @@ public class CL_DuelMasterRepository {
         TextCriteria textCriteria = TextCriteria.forDefaultLanguage()
         .matchingPhrase(term);
 
-        TextQuery textQuery = TextQuery.queryText(textCriteria);
+        TextQuery textQuery = new TextQuery(textCriteria);
 
-        TextQuerySorting(textQuery, F_BOOSTER, true);
+        TextQuerySorting(textQuery, F_BOOSTER, false);
 
         List<DuelMasterCard> results = mongoTemplate.find(textQuery, DuelMasterCard.class, C_DUELMASTER);
 

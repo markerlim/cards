@@ -38,6 +38,7 @@ public class OnePieceCard {
     private String trigger;
     private String image;
     private String urlimage;
+    private int count;
 
     public OnePieceCard(){
 
@@ -227,6 +228,14 @@ public class OnePieceCard {
 
     public void setUrlimage(String urlimage) {
         this.urlimage = urlimage;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
         

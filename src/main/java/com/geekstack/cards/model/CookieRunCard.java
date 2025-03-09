@@ -64,6 +64,8 @@ public class CookieRunCard {
     @Field("booster")
     private String booster;
 
+    private int count;
+
     public CookieRunCard() {
     }
 
@@ -95,6 +97,22 @@ public class CookieRunCard {
         this.booster = booster;
     }
 
+
+    public String getBooster() {
+        return booster;
+    }
+
+    public void setBooster(String booster) {
+        this.booster = booster;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     public ObjectId get_id() {
         return _id;

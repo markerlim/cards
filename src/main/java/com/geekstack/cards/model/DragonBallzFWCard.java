@@ -37,6 +37,7 @@ public class DragonBallzFWCard {
     private String setFrom;
     private String specifieddcost;
     private String urlimage;
+    private int count;
 
     public DragonBallzFWCard(){
         
@@ -226,6 +227,14 @@ public class DragonBallzFWCard {
 
     public void setUrlimage(String urlimage) {
         this.urlimage = urlimage;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     

@@ -12,6 +12,7 @@ import com.geekstack.cards.model.DragonBallzFWCard;
 import com.geekstack.cards.model.DuelMasterCard;
 import com.geekstack.cards.model.OnePieceCard;
 import com.geekstack.cards.model.UnionArenaCard;
+import com.geekstack.cards.model.UnionArenaCardDTO;
 import com.geekstack.cards.repository.CL_CookieRunRepository;
 import com.geekstack.cards.repository.CL_DragonBallzFWRepository;
 import com.geekstack.cards.repository.CL_DuelMasterRepository;
@@ -83,7 +84,10 @@ public class CardListService {
             return unionArenaRepository.getCardsByAnimeCode(animeCode);
         }
 
-        public List<UnionArenaCard> searchDatabase(String term){
+        public List<UnionArenaCard> searchDatabaseFull(String term){
+            return unionArenaRepository.searchForCardsFull(term);
+        }
+        public List<UnionArenaCardDTO> searchDatabase(String term){
             return unionArenaRepository.searchForCards(term);
         }
 

@@ -20,7 +20,7 @@ public class UnionArenaCard {
 
     private int apcost;
     private int banRatio;
-
+    private String banWith;
     private String basicpower;
     private String booster;
     private String cardId;
@@ -60,21 +60,23 @@ public class UnionArenaCard {
 
     private String YYT;
     private String FULLA;
+    private int count;
 
     public UnionArenaCard() {
     }
+    
 
-    public UnionArenaCard(ObjectId _id, String anime, String animeCode, int apcost, int banRatio,
-            String basicpower, String booster, String cardId, String cardUid, String cardName,
-            String category, String color, String effect, int energycost,
-            String energygen, String image, String rarity, String traits,
-            String trigger, String triggerState, String urlimage, String rarityAct, String cardcode,
-            String priceYytId, String priceFullaId, String YYT, String FULLA) {
+    public UnionArenaCard(ObjectId _id, String anime, String animeCode, int apcost, int banRatio, String banWith,
+            String basicpower, String booster, String cardId, String cardUid, String cardName, String category,
+            String color, String effect, int energycost, String energygen, String image, String rarity, String traits,
+            String trigger, String triggerState, String urlimage, String rarityAct, String cardcode, String priceYytId,
+            String priceFullaId, String yYT, String fULLA) {
         this._id = _id;
         this.anime = anime;
         this.animeCode = animeCode;
         this.apcost = apcost;
         this.banRatio = banRatio;
+        this.banWith = banWith;
         this.basicpower = basicpower;
         this.booster = booster;
         this.cardId = cardId;
@@ -95,9 +97,10 @@ public class UnionArenaCard {
         this.cardcode = cardcode;
         this.priceYytId = priceYytId;
         this.priceFullaId = priceFullaId;
-        this.YYT = YYT;
-        this.FULLA = FULLA;
+        YYT = yYT;
+        FULLA = fULLA;
     }
+
 
     public ObjectId get_id() {
         return _id;
@@ -313,6 +316,24 @@ public class UnionArenaCard {
 
     public void setFULLA(String fULLA) {
         FULLA = fULLA;
+    }
+
+    public String getBanWith() {
+        return banWith;
+    }
+
+    public void setBanWith(String banWith) {
+        this.banWith = banWith;
+    }
+
+
+    public int getCount() {
+        return count;
+    }
+
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
 }

@@ -37,12 +37,11 @@ public class CL_DragonBallzFWRepository {
     public List<DragonBallzFWCard> searchForCards(String term) {
         TextCriteria textCriteria = TextCriteria.forDefaultLanguage()
                 .matchingPhrase(term);
+        TextQuery textQuery = new TextQuery(textCriteria);
 
-        TextQuery textQuery = TextQuery.queryText(textCriteria);
+        TextQuerySorting(textQuery, F_BOOSTER, true, F_CARDUID,true);
 
-        TextQuerySorting(textQuery, F_BOOSTER, true, F_CARDUID, true);
-
-        List<DragonBallzFWCard> results = mongoTemplate.find(textQuery, DragonBallzFWCard.class, C_DRAGONBALLZFW);
+        List<DragonBallzFWCard> results =  mongoTemplate.find(textQuery, DragonBallzFWCard.class, C_DRAGONBALLZFW);
         return results;
     }
 
