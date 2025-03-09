@@ -30,8 +30,9 @@ public class UserDetailService {
             String userId = jObj.getString("uid");
             String name = jObj.getString("displayName");
             String displaypic = jObj.getString("photoURL");
-            if (!userDetailsMySQLRepository.userExist(userId)) {
-                userDetailsMySQLRepository.createUser(userId, name, displaypic);
+            String email = jObj.getString("email");
+            if (!userDetailsMySQLRepository.userExists(userId)) {
+                userDetailsMySQLRepository.createUser(userId, name, displaypic, email);
                 userDetailsMongoRepository.createUser(userId);
                 return 1;
             }

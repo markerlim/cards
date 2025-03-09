@@ -41,7 +41,7 @@ public class UserDetailsController {
                 response.put("message", "User created successfully");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             }
-            response.put("message", "User exits");
+            response.put("message", "Exit");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
