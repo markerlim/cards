@@ -65,7 +65,6 @@ public class CookieRunCard {
     private String booster;
 
     private int count;
-
     public CookieRunCard() {
     }
 
@@ -285,12 +284,5 @@ public class CookieRunCard {
         this.cardLevelTitle = cardLevelTitle;
     }
 
-    public String getbooster() {
-        return booster;
-    }
-
-    public void setbooster(String booster) {
-        this.booster = booster;
-    }
 }
 
