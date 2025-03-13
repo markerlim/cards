@@ -8,6 +8,8 @@ public class Comment {
     private String commentId;
     private String comment;
     private String userId;
+    private String name;
+    private String displaypic;
     private LocalDateTime timestamp;
 
     public Comment() {
@@ -21,6 +23,22 @@ public class Comment {
         this.timestamp = timestamp;
     }
     
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDisplaypic() {
+        return displaypic;
+    }
+
+    public void setDisplaypic(String displaypic) {
+        this.displaypic = displaypic;
+    }
 
     public String getCommentId() {
         return commentId;

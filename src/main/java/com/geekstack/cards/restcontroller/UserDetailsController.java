@@ -1,5 +1,6 @@
 package com.geekstack.cards.restcontroller;
 
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,10 @@ import com.geekstack.cards.model.UnionArenaDecklist;
 import com.geekstack.cards.repository.UserDetailsMongoRepository;
 import com.geekstack.cards.service.UserDetailService;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserDetailsController {
@@ -34,17 +39,34 @@ public class UserDetailsController {
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createNewUser(@RequestBody String payload) {
+        Map<String, Object> response = new HashMap<>();
         try {
-            System.out.println(payload);
-            Map<String, Object> response = new HashMap<>();
-            if (userDetailService.createUser(payload) == 1) {
+            JsonReader reader = Json.createReader(new StringReader(payload));
+            JsonObject jObj = reader.readObject();
+            String userId = jObj.getString("uid");
+            String name = jObj.getString("displayName");
+            String displaypic = jObj.getString("photoURL");
+            String email = jObj.getString("email");
+            if (userDetailService.createUser(userId,name,displaypic,email) == 1) {
                 response.put("message", "User created successfully");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             }
-            response.put("message", "Exit");
+            response.put("message", "User exist in database");
+            response.put("userObject",userDetailService.getOneUser(userId));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Error adding user: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/get")
+    public ResponseEntity<Map<String, Object>> getOneUser(@RequestBody String userId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("userObject",userDetailService.getOneUser(userId));
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
             response.put("message", "Error adding user: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -54,15 +76,14 @@ public class UserDetailsController {
     @PostMapping("/save/unionarena/{userId}/deck")
     public ResponseEntity<Map<String, Object>> saveUADeck(@PathVariable String userId,
             @RequestBody UnionArenaDecklist decklist) {
+        Map<String, Object> response = new HashMap<>();
         try {
             userDetailsMongoRepository.createUnionArenaDecklist(decklist, userId);
 
-            Map<String, Object> response = new HashMap<>();
             response.put("message", "Deck created successfully");
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
             response.put("message", "Error adding deck: " + e.getMessage());
             response.put("deckId", null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -80,15 +101,13 @@ public class UserDetailsController {
     @PostMapping("/save/onepiece/{userId}/deck")
     public ResponseEntity<Map<String, Object>> saveOPDeck(@PathVariable String userId,
             @RequestBody OnePieceDecklist decklist) {
+        Map<String, Object> response = new HashMap<>();
+
         try {
             userDetailsMongoRepository.createOnePieceDecklist(decklist, userId);
-
-            Map<String, Object> response = new HashMap<>();
             response.put("message", "Deck created successfully");
-
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
             response.put("message", "Error adding deck: " + e.getMessage());
             response.put("deckId", null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -106,15 +125,12 @@ public class UserDetailsController {
     @PostMapping("/save/dragonballzfw/{userId}/deck")
     public ResponseEntity<Map<String, Object>> saveDBZFWDeck(@PathVariable String userId,
             @RequestBody DragonballzFWDecklist decklist) {
+        Map<String, Object> response = new HashMap<>();
         try {
             userDetailsMongoRepository.createDragonballzFWDecklist(decklist, userId);
-
-            Map<String, Object> response = new HashMap<>();
             response.put("message", "Deck created successfully");
-
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
             response.put("message", "Error adding deck: " + e.getMessage());
             response.put("deckId", null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -132,15 +148,12 @@ public class UserDetailsController {
     @PostMapping("/save/cookierunbraverse/{userId}/deck")
     public ResponseEntity<Map<String, Object>> saveCRBDeck(@PathVariable String userId,
             @RequestBody CookieRunDecklist decklist) {
+        Map<String, Object> response = new HashMap<>();
         try {
             userDetailsMongoRepository.createCookieRunDecklist(decklist, userId);
-
-            Map<String, Object> response = new HashMap<>();
             response.put("message", "Deck created successfully");
-
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
             response.put("message", "Error adding deck: " + e.getMessage());
             response.put("deckId", null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -155,16 +168,14 @@ public class UserDetailsController {
     }
 
     @DeleteMapping("/delete/{tcg}/{userId}/deck/{deckId}")
-    public ResponseEntity<Map<String, Object>> deleteDeck( @PathVariable String tcg,@PathVariable String userId,
+    public ResponseEntity<Map<String, Object>> deleteDeck(@PathVariable String tcg, @PathVariable String userId,
             @PathVariable String deckId) {
+        Map<String, Object> response = new HashMap<>();
         try {
             userDetailsMongoRepository.deleteDecklist(tcg, userId, deckId);
-            Map<String, Object> response = new HashMap<>();
             response.put("message", "Deck deleted successfully");
-
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
             response.put("message", "Error adding deck: " + e.getMessage());
             response.put("deckId", deckId);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

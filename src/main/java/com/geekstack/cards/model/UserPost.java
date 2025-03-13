@@ -20,9 +20,27 @@ public class UserPost {
     private List<CardDetails> listofcards;//c
     private List<String> listoflikes;
     private List<Comment> listofcomments;
+    private String name;
+    private String displaypic;
 
     public UserPost() {
 
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDisplaypic() {
+        return displaypic;
+    }
+
+    public void setDisplaypic(String displaypic) {
+        this.displaypic = displaypic;
     }
 
     public List<String> getListoflikes() {

@@ -15,11 +15,10 @@ public class CardsApplication {
 	}
 
 	@Bean
-	public CommonsRequestLoggingFilter logging(){
-		 CommonsRequestLoggingFilter crlf = new CommonsRequestLoggingFilter();
-		 crlf.setIncludeClientInfo(true);
-		 crlf.setIncludeQueryString(true);
-		 return crlf;
+	public CommonsRequestLoggingFilter logging() {
+		CommonsRequestLoggingFilter crlf = new CommonsRequestLoggingFilter();
+		crlf.setIncludeClientInfo(true);
+		crlf.setIncludeQueryString(true);
+		return crlf;
 	}
-
 }

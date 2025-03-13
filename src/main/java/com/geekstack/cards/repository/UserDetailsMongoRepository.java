@@ -30,6 +30,12 @@ public class UserDetailsMongoRepository {
         mongoTemplate.insert(userDetails, C_USER);
     }
 
+    public UserDetails getOneUser(String userId){
+        Query query = new Query(Criteria.where(F_USERID).is(userId));
+        UserDetails user = mongoTemplate.findOne(query, UserDetails.class, C_USER);
+        return user;
+    }
+
     public void createUnionArenaDecklist(UnionArenaDecklist decklist, String userId) {
         Query query = new Query(Criteria.where(F_USERID).is(userId));
         decklist.setDeckuid(UUID.randomUUID().toString());
@@ -40,6 +46,7 @@ public class UserDetailsMongoRepository {
     public List<UnionArenaDecklist> loadUnionArenaDecklist(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where(F_USERID).is(userId));
+        query.fields().include("uadecks");
         UserDetails user = mongoTemplate.findOne(query, UserDetails.class, C_USER);
         if (user == null || user.getUadecks() == null) {
             return List.of();
@@ -57,6 +64,7 @@ public class UserDetailsMongoRepository {
     public List<OnePieceDecklist> loadOnePieceDecklist(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where(F_USERID).is(userId));
+        query.fields().include("opdecks");
         UserDetails user = mongoTemplate.findOne(query, UserDetails.class, C_USER);
         if (user == null || user.getOpdecks() == null) {
             return List.of();
@@ -74,6 +82,7 @@ public class UserDetailsMongoRepository {
     public List<CookieRunDecklist> loadCookieRunDecklist(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where(F_USERID).is(userId));
+        query.fields().include("crbdecks");
         UserDetails user = mongoTemplate.findOne(query, UserDetails.class, C_USER);
         if (user == null || user.getCrbdecks() == null) {
             return List.of();
@@ -91,6 +100,7 @@ public class UserDetailsMongoRepository {
     public List<DragonballzFWDecklist> loadDragonballzFWDecklist(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where(F_USERID).is(userId));
+        query.fields().include("dbzfwdecks");
         UserDetails user = mongoTemplate.findOne(query, UserDetails.class, C_USER);
         if (user == null || user.getDbzfwdecks() == null) {
             return List.of();

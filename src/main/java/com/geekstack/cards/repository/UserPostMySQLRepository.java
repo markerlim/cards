@@ -1,19 +1,13 @@
 package com.geekstack.cards.repository;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
-
-import com.geekstack.cards.model.Comment;
 
 @Repository
 public class UserPostMySQLRepository {
@@ -21,14 +15,41 @@ public class UserPostMySQLRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final static String SQL_LIKE_COUNT = "SELECT COUNT(*) FROM userlikes WHERE postId = ?";
+    private final static String SQL_GET_USERDETAILS = "SELECT userId ,name, displaypic FROM users WHERE userId IN (%s)";
 
-    private final static String SQL_CREATE_COMMENT = "INSERT INTO usercomments(postId,userId,comments,timestamp) VALUES (?,?,?,?)";
+    public List<Map<String, Object>> batchGetUser(List<String> ids) {
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        int batchSize = 30;
 
-    private final static String SQL_LIKE_POST = "INSERT INTO userlikes(postId,userId) VALUES (?,?)";
+        for (int i = 0; i < ids.size(); i += batchSize) {
+            List<String> batch = ids.subList(i, Math.min(i + batchSize, ids.size()));
 
-    private final static String SQL_CREATE_POST = "INSERT INTO userpost(postId,userId,timestamp) VALUES (?,?,?)";
+            String placeholders = String.join(",", Collections.nCopies(batch.size(), "?"));
+
+            String sql = String.format(SQL_GET_USERDETAILS, placeholders);
+
+            List<Map<String, Object>> batchResults = jdbcTemplate.queryForList(sql, batch.toArray());
+
+            resultList.addAll(batchResults);
+        }
+
+        return resultList;
+    }
+
     /**
+     * Archived
+     * private final static String SQL_LIKE_COUNT = "SELECT COUNT(*) FROM userlikes
+     * WHERE postId = ?";
+     * 
+     * private final static String SQL_CREATE_COMMENT = "INSERT INTO
+     * usercomments(postId,userId,comments,timestamp) VALUES (?,?,?,?)";
+     * 
+     * private final static String SQL_LIKE_POST = "INSERT INTO
+     * userlikes(postId,userId) VALUES (?,?)";
+     * 
+     * private final static String SQL_CREATE_POST = "INSERT INTO
+     * userpost(postId,userId,timestamp) VALUES (?,?,?)";
+     * 
      * public Map<String, List<Comment>> listOfComments(List<String> postIds) {
      * List<Comment> loc = new ArrayList<>();
      * final StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM

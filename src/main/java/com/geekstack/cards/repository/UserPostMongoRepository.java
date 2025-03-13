@@ -25,9 +25,9 @@ public class UserPostMongoRepository {
     /**
      * db.userpost.find({}).limit(20)
      */
-    public List<UserPost> userPostingsDefault() {
+    public List<UserPost> userPostingsDefault(int limit) {
         Query query = new Query();
-        return mongoTemplate.find(query.with(Sort.by(Sort.Direction.DESC, "timestamp")).limit(20), UserPost.class, C_USERPOST);
+        return mongoTemplate.find(query.with(Sort.by(Sort.Direction.DESC, "timestamp")).limit(limit), UserPost.class, C_USERPOST);
     }
 
     /**

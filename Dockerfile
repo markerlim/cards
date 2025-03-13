@@ -29,6 +29,9 @@ ENV SERVER_PORT=8080
 
 # Expose the port
 EXPOSE ${SERVER_PORT}
+EXPOSE ${RABBITMQ_LOCALHOST}
+EXPOSE ${RABBITMQ_LOCAL_PORT}
+EXPOSE ${RABBITMQ_GUEST}
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "target/cards-0.0.1-SNAPSHOT.jar"]

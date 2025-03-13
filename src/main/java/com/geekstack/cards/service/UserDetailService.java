@@ -1,6 +1,7 @@
 package com.geekstack.cards.service;
 
-import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,10 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.geekstack.cards.repository.UserDetailsMongoRepository;
 import com.geekstack.cards.repository.UserDetailsMySQLRepository;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 
 @Service
 public class UserDetailService {
@@ -23,15 +20,9 @@ public class UserDetailService {
     private UserDetailsMySQLRepository userDetailsMySQLRepository;
 
     @Transactional
-    public int createUser(String payload) {
+    public int createUser(String userId, String name, String displaypic, String email) {
         try {
-            JsonReader reader = Json.createReader(new StringReader(payload));
-            JsonObject jObj = reader.readObject();
-            String userId = jObj.getString("uid");
-            String name = jObj.getString("displayName");
-            String displaypic = jObj.getString("photoURL");
-            String email = jObj.getString("email");
-            if (!userDetailsMySQLRepository.userExists(userId)) {
+            if (userDetailsMySQLRepository.userExists(userId).isEmpty()) {
                 userDetailsMySQLRepository.createUser(userId, name, displaypic, email);
                 userDetailsMongoRepository.createUser(userId);
                 return 1;
@@ -43,7 +34,12 @@ public class UserDetailService {
             return 2;
 
         }
-
     }
 
+    public Map<String,Object> getOneUser(String userId){
+        Map<String,Object> holder = new HashMap<>();
+        holder.put("gsMongoUser",userDetailsMongoRepository.getOneUser(userId));
+        holder.put("gsSQLUser",userDetailsMySQLRepository.userExists(userId));
+        return holder;
+    }
 }
