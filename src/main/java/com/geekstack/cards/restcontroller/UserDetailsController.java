@@ -21,11 +21,9 @@ import com.geekstack.cards.model.DragonballzFWDecklist;
 import com.geekstack.cards.model.OnePieceDecklist;
 import com.geekstack.cards.model.UnionArenaDecklist;
 import com.geekstack.cards.repository.UserDetailsMongoRepository;
+import com.geekstack.cards.service.FirebaseService;
 import com.geekstack.cards.service.UserDetailService;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
+import com.google.firebase.auth.FirebaseToken;
 
 @RestController
 @RequestMapping("/api/user")
@@ -37,22 +35,24 @@ public class UserDetailsController {
     @Autowired
     private UserDetailService userDetailService;
 
+    @Autowired
+    private FirebaseService firebaseService;
+
     @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> createNewUser(@RequestBody String payload) {
+    public ResponseEntity<Map<String, Object>> createNewUser(@RequestBody String idToken) {
         Map<String, Object> response = new HashMap<>();
         try {
-            JsonReader reader = Json.createReader(new StringReader(payload));
-            JsonObject jObj = reader.readObject();
-            String userId = jObj.getString("uid");
-            String name = jObj.getString("displayName");
-            String displaypic = jObj.getString("photoURL");
-            String email = jObj.getString("email");
-            if (userDetailService.createUser(userId,name,displaypic,email) == 1) {
+            FirebaseToken decoded = firebaseService.verifyIdToken(idToken);
+            String userId = decoded.getUid();
+            String name = decoded.getName();
+            String displaypic = decoded.getPicture();
+            String email = decoded.getEmail();
+            if (userDetailService.createUser(userId, name, displaypic, email) == 1) {
                 response.put("message", "User created successfully");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             }
             response.put("message", "User exist in database");
-            response.put("userObject",userDetailService.getOneUser(userId));
+            response.put("userObject", userDetailService.getOneUser(userId));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             response.put("message", "Error adding user: " + e.getMessage());
@@ -61,10 +61,12 @@ public class UserDetailsController {
     }
 
     @PostMapping("/get")
-    public ResponseEntity<Map<String, Object>> getOneUser(@RequestBody String userId) {
+    public ResponseEntity<Map<String, Object>> getOneUser(@RequestBody String idToken) {
         Map<String, Object> response = new HashMap<>();
         try {
-            response.put("userObject",userDetailService.getOneUser(userId));
+            FirebaseToken decoded = firebaseService.verifyIdToken(idToken);
+            String userId = decoded.getUid();
+            response.put("userObject", userDetailService.getOneUser(userId));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             response.put("message", "Error adding user: " + e.getMessage());

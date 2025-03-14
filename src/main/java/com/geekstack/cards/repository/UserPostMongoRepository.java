@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -25,9 +28,14 @@ public class UserPostMongoRepository {
     /**
      * db.userpost.find({}).limit(20)
      */
-    public List<UserPost> userPostingsDefault(int limit) {
-        Query query = new Query();
-        return mongoTemplate.find(query.with(Sort.by(Sort.Direction.DESC, "timestamp")).limit(limit), UserPost.class, C_USERPOST);
+    public List<UserPost> userPostingsDefault(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timestamp"));
+        Query query = new Query().with(pageable);
+    
+        List<UserPost> posts = mongoTemplate.find(query, UserPost.class, C_USERPOST);
+        long total = mongoTemplate.count(new Query(), UserPost.class, C_USERPOST);
+    
+        return new PageImpl<>(posts, pageable, total).getContent();
     }
 
     /**

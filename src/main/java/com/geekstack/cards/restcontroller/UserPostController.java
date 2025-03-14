@@ -1,6 +1,5 @@
 package com.geekstack.cards.restcontroller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +33,8 @@ public class UserPostController {
     private RabbitMQProducer rabbitMQProducer;
 
     @GetMapping
-    public ResponseEntity<List<UserPost>> test(@RequestParam(defaultValue = "20") String limit) {
-        return ResponseEntity.ok(userPostService.listUserPost(Integer.parseInt(limit)));
+    public ResponseEntity<List<UserPost>> test(@RequestParam(defaultValue = "1") String page, @RequestParam(defaultValue = "20") String limit) {
+        return ResponseEntity.ok(userPostService.listUserPost(Integer.parseInt(page),Integer.parseInt(limit)));
     }
 
     /**

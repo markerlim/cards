@@ -27,8 +27,8 @@ public class UserPostService {
     @Autowired
     private UserPostMySQLRepository userPostMySQLRepository;
 
-    public List<UserPost> listUserPost(int limit) {
-        List<UserPost> userPosts = userPostMongoRepository.userPostingsDefault(limit);
+    public List<UserPost> listUserPost(int page, int limit) {
+        List<UserPost> userPosts = userPostMongoRepository.userPostingsDefault(page,limit);
 
         Set<String> uniquePostUserIds = userPosts.stream()
                 .map(UserPost::getUserId)
