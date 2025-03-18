@@ -4,7 +4,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,13 +11,14 @@ public class FirebaseService {
 
     private static final Logger logger = LoggerFactory.getLogger(FirebaseService.class);
 
-    @Autowired
-    private FirebaseAuth firebaseAuth;
-
     public FirebaseToken verifyIdToken(String idToken) throws Exception {
-        logger.info("ID Token received: {}", idToken);        
+        logger.info("ID Token received: {}", idToken);
+        String bearerToken = idToken;
+        if (bearerToken.startsWith("Bearer ")) {
+            bearerToken =  bearerToken.substring(7);
+        }
         try {
-            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(bearerToken);
             return decodedToken;
         } catch (Exception e) {
             logger.error("Error verifying ID token", e);

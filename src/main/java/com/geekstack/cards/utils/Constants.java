@@ -16,8 +16,10 @@ public class Constants {
     public static final String C_YUYUTEI="cardprices_yyt";
     public static final String C_USERPOST="userpost";
     public static final String C_USER="users";
+    public static final String C_NOTIFICATION="notification";
 
     public static final String F_USERID="_id";
+    public static final String F_USERID_REAL="userId";
     public static final String F_DECKS="decks";
     public static final String F_UADECKS="uadecks";
     public static final String F_OPDECKS="opdeck";

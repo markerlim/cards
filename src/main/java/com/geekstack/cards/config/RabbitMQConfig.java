@@ -13,6 +13,9 @@ public class RabbitMQConfig {
     public static final String UNLIKE_QUEUE_NAME = "unlikeQueue";
     public static final String UNLIKE_EXCHANGE_NAME = "unlikeExchange";
     public static final String UNLIKE_ROUTING_KEY = "unlikeRoutingKey";
+    public static final String NOTIFICATIONS_QUEUE_NAME = "notificationsQueue";
+    public static final String NOTIFICATIONS_EXCHANGE_NAME="notificationsExchange";
+    public static final String NOTIFICATIONS_ROUTING_KEY = "notificationsRoutingKey";
 
     @Bean
     public Queue likesQueue() {
@@ -22,6 +25,11 @@ public class RabbitMQConfig {
     @Bean
     public Queue unlikesQueue() {
         return new Queue(UNLIKE_QUEUE_NAME, true);
+    }
+
+    @Bean
+    public Queue notificationsQueue(){
+        return new Queue(NOTIFICATIONS_QUEUE_NAME, true);
     }
 
     @Bean
@@ -35,6 +43,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public DirectExchange notificationsExchange(){
+        return new DirectExchange(NOTIFICATIONS_EXCHANGE_NAME);
+    }
+
+    @Bean
     public Binding bindingLikesQueue() {
         return BindingBuilder.bind(likesQueue()).to(likesExchange()).with(LIKE_ROUTING_KEY);
     }
@@ -42,5 +55,10 @@ public class RabbitMQConfig {
     @Bean
     public Binding bindingUnlikesQueue() {
         return BindingBuilder.bind(unlikesQueue()).to(unlikesExchange()).with(UNLIKE_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding bindingNotificationsQueue(){
+        return BindingBuilder.bind(notificationsQueue()).to(notificationsExchange()).with(NOTIFICATIONS_ROUTING_KEY);
     }
 }

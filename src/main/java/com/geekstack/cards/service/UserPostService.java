@@ -1,5 +1,7 @@
 package com.geekstack.cards.service;
 
+import java.io.StringReader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,6 +20,10 @@ import com.geekstack.cards.model.UserPost;
 import com.geekstack.cards.repository.UserPostMongoRepository;
 import com.geekstack.cards.repository.UserPostMySQLRepository;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+
 @Service
 public class UserPostService {
 
@@ -27,8 +33,11 @@ public class UserPostService {
     @Autowired
     private UserPostMySQLRepository userPostMySQLRepository;
 
+    @Autowired
+    private RabbitMQProducer rabbitMQProducer;
+
     public List<UserPost> listUserPost(int page, int limit) {
-        List<UserPost> userPosts = userPostMongoRepository.userPostingsDefault(page,limit);
+        List<UserPost> userPosts = userPostMongoRepository.userPostingsDefault(page, limit);
 
         Set<String> uniquePostUserIds = userPosts.stream()
                 .map(UserPost::getUserId)
@@ -102,8 +111,16 @@ public class UserPostService {
     }
 
     // Comment on a post by postId
-    public String commentPost(String postId, String comment, String userId) {
-        return userPostMongoRepository.addComment(postId, comment, userId);
+    public String commentPost(String payload) {
+        JsonReader reader = Json.createReader(new StringReader(payload));
+        JsonObject jobject = reader.readObject();
+        JsonObject userObject = jobject.getJsonObject("user");
+
+        String message = "commented on your post.";
+
+        rabbitMQProducer.sendNotificationEvent(jobject.getString("postId"), jobject.getString("posterId"),
+                LocalDateTime.now(),message, userObject.getString("userId"), userObject.getString("name"), userObject.getString("displaypic"));
+        return userPostMongoRepository.addComment(jobject.getString("postId"), jobject.getString("comment"), userObject.getString("userId"));
     }
 
     // Delete comment from a post where comment is from and delete by commentId
@@ -118,4 +135,14 @@ public class UserPostService {
 
     }
 
+    public void handleLikeEvent(String payload) {
+        JsonReader reader = Json.createReader(new StringReader(payload));
+        JsonObject jobject = reader.readObject();
+        JsonObject userObject = jobject.getJsonObject("user");
+        String message = "liked your post.";
+
+        rabbitMQProducer.sendLikeEvent(jobject.getString("postId"), userObject.getString("userId"));
+        rabbitMQProducer.sendNotificationEvent(jobject.getString("postId"), jobject.getString("posterId"),
+                LocalDateTime.now(),message, userObject.getString("userId"), userObject.getString("name"), userObject.getString("displaypic"));
+    }
 }

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.geekstack.cards.model.Comment;
 import com.geekstack.cards.model.UserPost;
-import com.geekstack.cards.service.RabbitMQProducer;
 import com.geekstack.cards.service.UserPostService;
 
 @RestController
@@ -28,9 +27,6 @@ public class UserPostController {
 
     @Autowired
     private UserPostService userPostService;
-
-    @Autowired
-    private RabbitMQProducer rabbitMQProducer;
 
     @GetMapping
     public ResponseEntity<List<UserPost>> test(@RequestParam(defaultValue = "1") String page, @RequestParam(defaultValue = "20") String limit) {
@@ -87,19 +83,17 @@ public class UserPostController {
         }
     }
 
-    @PostMapping("/comment/{postId}/by/{userId}")
-    public ResponseEntity<Map<String, Object>> commentPost(@PathVariable String postId,
-            @PathVariable String userId,
-            @RequestBody Comment comment) {
+    @PostMapping("/comment")
+    public ResponseEntity<Map<String, Object>> commentPost(
+            @RequestBody String payload) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String commentId = userPostService.commentPost(postId, comment.getComment(), userId);
+            String commentId = userPostService.commentPost(payload);
             response.put("message", "Comment created successfully");
             response.put("commentId", commentId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             response.put("message", "Error adding deck: " + e.getMessage());
-            response.put("comments", comment.getComment());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
@@ -118,13 +112,13 @@ public class UserPostController {
         }
     }
 
-    @PostMapping("/like/{postId}/by/{userId}")
-    public ResponseEntity<Map<String, Object>> likeAPost(@PathVariable String postId,
-            @PathVariable String userId) {
+    //userId refer to the user that trigger this action
+    @PostMapping("/like")
+    public ResponseEntity<Map<String, Object>> likeAPost(
+            @RequestBody String payload) {
         Map<String, Object> response = new HashMap<>();
         try {
-            System.out.println("QUEUEING:");
-            rabbitMQProducer.sendLikeEvent(postId, userId);
+            userPostService.handleLikeEvent(payload);
             response.put("message", "like recorded successfully");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {

@@ -1,10 +1,11 @@
 package com.geekstack.cards.restcontroller;
 
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.geekstack.cards.model.CookieRunDecklist;
 import com.geekstack.cards.model.DragonballzFWDecklist;
+import com.geekstack.cards.model.Notification;
 import com.geekstack.cards.model.OnePieceDecklist;
 import com.geekstack.cards.model.UnionArenaDecklist;
 import com.geekstack.cards.repository.UserDetailsMongoRepository;
@@ -28,6 +32,8 @@ import com.google.firebase.auth.FirebaseToken;
 @RestController
 @RequestMapping("/api/user")
 public class UserDetailsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsController.class);
 
     @Autowired
     private UserDetailsMongoRepository userDetailsMongoRepository;
@@ -182,5 +188,16 @@ public class UserDetailsController {
             response.put("deckId", deckId);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+    // Stopped at
+    // Resolved [org.springframework.web.bind.MissingRequestHeaderException:
+    // Required request header 'payload' for method parameter type String is not
+    // present]
+    @GetMapping("/notifications")
+    public ResponseEntity<List<Notification>> listOfNotifications(@RequestHeader("Authorization") String authorization,
+            @RequestParam(defaultValue = "10") String limit) throws Exception {
+        return new ResponseEntity<List<Notification>>(userDetailService.listNotifications(authorization, limit),
+                HttpStatus.OK);
     }
 }
