@@ -104,7 +104,7 @@ public class UserPostController {
         }
     }
 
-    @PostMapping("/comment/{postId}/delete/{commentId}")
+    @DeleteMapping("/comment/{postId}/delete/{commentId}")
     public ResponseEntity<Map<String, Object>> deleteComment(@PathVariable String postId,
             @PathVariable String commentId) {
         Map<String, Object> response = new HashMap<>();

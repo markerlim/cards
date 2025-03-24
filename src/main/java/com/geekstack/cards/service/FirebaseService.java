@@ -12,7 +12,6 @@ public class FirebaseService {
     private static final Logger logger = LoggerFactory.getLogger(FirebaseService.class);
 
     public FirebaseToken verifyIdToken(String idToken) throws Exception {
-        logger.info("ID Token received: {}", idToken);
         String bearerToken = idToken;
         if (bearerToken.startsWith("Bearer ")) {
             bearerToken =  bearerToken.substring(7);
