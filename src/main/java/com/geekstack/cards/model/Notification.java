@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Document(collection = C_NOTIFICATION)
 public class Notification {
     @Id
@@ -20,8 +18,6 @@ public class Notification {
     private String postId;//Post Id
     private String message;//Event action
     private Boolean isRead;//Boolean of read
-
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp;//Time stamp of event
 
     public Notification(){

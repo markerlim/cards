@@ -1,6 +1,5 @@
 package com.geekstack.cards.model;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class DragonBallzFWCard {
 
     @Id
-    private ObjectId _id;
+    private String _id;
     private boolean awakenform;
 
     @Field("booster")
@@ -43,7 +42,7 @@ public class DragonBallzFWCard {
         
     }
 
-    public DragonBallzFWCard(ObjectId _id, boolean awakenform, String booster, String cardId, String cardUid,
+    public DragonBallzFWCard(String _id, boolean awakenform, String booster, String cardId, String cardUid,
             String cardName, String cardNameLower, String cardtype, String color, String combopower, String cost,
             String effects, String features, String image, String power, String rarityAct, String rarity,
             String setFrom, String specifieddcost, String urlimage) {
@@ -69,11 +68,11 @@ public class DragonBallzFWCard {
         this.urlimage = urlimage;
     }
 
-    public ObjectId get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(ObjectId _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 

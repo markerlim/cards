@@ -26,11 +26,30 @@ public class UserPostMongoRepository {
     private MongoTemplate mongoTemplate;
 
     /**
-     * db.userpost.find({}).limit(20)
      */
     public List<UserPost> userPostingsDefault(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timestamp"));
         Query query = new Query().with(pageable);
+    
+        List<UserPost> posts = mongoTemplate.find(query, UserPost.class, C_USERPOST);
+        long total = mongoTemplate.count(new Query(), UserPost.class, C_USERPOST);
+    
+        return new PageImpl<>(posts, pageable, total).getContent();
+    }
+
+    public List<UserPost> userPostingsByUserId(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timestamp"));
+        Query query = new Query(Criteria.where(F_USERID_REAL).is(userId)).with(pageable);
+    
+        List<UserPost> posts = mongoTemplate.find(query, UserPost.class, C_USERPOST);
+        long total = mongoTemplate.count(new Query(), UserPost.class, C_USERPOST);
+    
+        return new PageImpl<>(posts, pageable, total).getContent();
+    }
+
+    public List<UserPost> userPostingsLikedByUserId(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timestamp"));
+        Query query = new Query(Criteria.where(F_USERPOST_LISTL).in(userId)).with(pageable);
     
         List<UserPost> posts = mongoTemplate.find(query, UserPost.class, C_USERPOST);
         long total = mongoTemplate.count(new Query(), UserPost.class, C_USERPOST);

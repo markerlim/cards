@@ -34,6 +34,9 @@ public class UserPostService {
     private UserPostMySQLRepository userPostMySQLRepository;
 
     @Autowired
+    private FirebaseService firebaseService;
+
+    @Autowired
     private RabbitMQProducer rabbitMQProducer;
 
     public List<UserPost> listUserPost(int page, int limit) {
@@ -98,10 +101,135 @@ public class UserPostService {
         return userPosts;
     }
 
+    public List<UserPost> listUserPostByUserId(String payload,int page, int limit) throws Exception {
+        String userId = firebaseService.verifyIdToken(payload).getUid();
+        List<UserPost> userPosts = userPostMongoRepository.userPostingsByUserId(userId, page, limit);
+
+        Set<String> uniquePostUserIds = userPosts.stream()
+                .map(UserPost::getUserId)
+                .collect(Collectors.toSet());
+
+        Set<String> uniqueCommentUserIds = new HashSet<>();
+        for (UserPost post : userPosts) {
+            List<Comment> comments = post.getListofcomments();
+            if (comments != null) {
+                comments.stream()
+                        .map(Comment::getUserId)
+                        .filter(Objects::nonNull)
+                        .forEach(uniqueCommentUserIds::add);
+            }
+        }
+
+        Set<String> allUniqueUserIds = new HashSet<>();
+        allUniqueUserIds.addAll(uniquePostUserIds);
+        allUniqueUserIds.addAll(uniqueCommentUserIds);
+
+        List<Map<String, Object>> allUserDetails = userPostMySQLRepository
+                .batchGetUser(new ArrayList<>(allUniqueUserIds));
+        System.out.println("finish user details pull\n");
+
+        Map<String, Map<String, Object>> userMap = new HashMap<>();
+        for (Map<String, Object> user : allUserDetails) {
+            userMap.put((String) user.get("userId"), user);
+        }
+
+        for (UserPost post : userPosts) {
+            String postUserId = post.getUserId();
+            Map<String, Object> postUser = userMap.get(postUserId);
+
+            if (postUser != null) {
+                post.setDisplaypic(postUser.get("displaypic") != null ? postUser.get("displaypic").toString() : null);
+                post.setName(postUser.get("name") != null ? postUser.get("name").toString() : null);
+            }
+
+            List<Comment> comments = post.getListofcomments();
+            if (comments != null) {
+                for (Comment comment : comments) {
+                    String commentUserId = comment.getUserId();
+                    if (commentUserId != null) {
+                        Map<String, Object> commentUser = userMap.get(commentUserId);
+                        if (commentUser != null) {
+                            comment.setDisplaypic(
+                                    commentUser.get("displaypic") != null ? commentUser.get("displaypic").toString()
+                                            : null);
+                            comment.setName(
+                                    commentUser.get("name") != null ? commentUser.get("name").toString() : null);
+                        }
+                    }
+                }
+            }
+        }
+
+        return userPosts;
+    }
+
+    public List<UserPost> listUserPostLikedByUserId(String payload,int page, int limit) throws Exception {
+        String userId = firebaseService.verifyIdToken(payload).getUid();
+        List<UserPost> userPosts = userPostMongoRepository.userPostingsLikedByUserId(userId, page, limit);
+
+        Set<String> uniquePostUserIds = userPosts.stream()
+                .map(UserPost::getUserId)
+                .collect(Collectors.toSet());
+
+        Set<String> uniqueCommentUserIds = new HashSet<>();
+        for (UserPost post : userPosts) {
+            List<Comment> comments = post.getListofcomments();
+            if (comments != null) {
+                comments.stream()
+                        .map(Comment::getUserId)
+                        .filter(Objects::nonNull)
+                        .forEach(uniqueCommentUserIds::add);
+            }
+        }
+
+        Set<String> allUniqueUserIds = new HashSet<>();
+        allUniqueUserIds.addAll(uniquePostUserIds);
+        allUniqueUserIds.addAll(uniqueCommentUserIds);
+
+        List<Map<String, Object>> allUserDetails = userPostMySQLRepository
+                .batchGetUser(new ArrayList<>(allUniqueUserIds));
+        System.out.println("finish user details pull\n");
+
+        Map<String, Map<String, Object>> userMap = new HashMap<>();
+        for (Map<String, Object> user : allUserDetails) {
+            userMap.put((String) user.get("userId"), user);
+        }
+
+        for (UserPost post : userPosts) {
+            String postUserId = post.getUserId();
+            Map<String, Object> postUser = userMap.get(postUserId);
+
+            if (postUser != null) {
+                post.setDisplaypic(postUser.get("displaypic") != null ? postUser.get("displaypic").toString() : null);
+                post.setName(postUser.get("name") != null ? postUser.get("name").toString() : null);
+            }
+
+            List<Comment> comments = post.getListofcomments();
+            if (comments != null) {
+                for (Comment comment : comments) {
+                    String commentUserId = comment.getUserId();
+                    if (commentUserId != null) {
+                        Map<String, Object> commentUser = userMap.get(commentUserId);
+                        if (commentUser != null) {
+                            comment.setDisplaypic(
+                                    commentUser.get("displaypic") != null ? commentUser.get("displaypic").toString()
+                                            : null);
+                            comment.setName(
+                                    commentUser.get("name") != null ? commentUser.get("name").toString() : null);
+                        }
+                    }
+                }
+            }
+        }
+
+        return userPosts;
+    }
+
     // This method is no longer needed as we're handling all users in one go
     // You can remove this method entirely
     // Create a post
     public void createPost(UserPost userPost) {
+        userPost.setTimestamp(LocalDateTime.now());
         userPostMongoRepository.userPostAction(userPost);
     }
 

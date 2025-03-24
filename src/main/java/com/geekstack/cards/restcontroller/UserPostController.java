@@ -1,5 +1,6 @@
 package com.geekstack.cards.restcontroller;
 
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.geekstack.cards.model.Comment;
 import com.geekstack.cards.model.UserPost;
 import com.geekstack.cards.service.UserPostService;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 
 @RestController
 @RequestMapping("/api/userpost")
@@ -29,8 +34,9 @@ public class UserPostController {
     private UserPostService userPostService;
 
     @GetMapping
-    public ResponseEntity<List<UserPost>> test(@RequestParam(defaultValue = "1") String page, @RequestParam(defaultValue = "20") String limit) {
-        return ResponseEntity.ok(userPostService.listUserPost(Integer.parseInt(page),Integer.parseInt(limit)));
+    public ResponseEntity<List<UserPost>> listalluserpost(@RequestParam(defaultValue = "1") String page,
+            @RequestParam(defaultValue = "20") String limit) {
+        return ResponseEntity.ok(userPostService.listUserPost(Integer.parseInt(page), Integer.parseInt(limit)));
     }
 
     /**
@@ -56,14 +62,14 @@ public class UserPostController {
      * @param userPost
      * @return
      */
-    @PostMapping(path = { "/post/{userId}" }, consumes = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Map<String, Object>> userMakePost(@PathVariable String userId, @RequestBody UserPost userPost) {
+    @PostMapping(path = { "/post" }, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<Map<String, Object>> userMakePost(
+            @RequestBody UserPost userPost) {
         Map<String, Object> response = new HashMap<>();
         try {
-            userPost.setUserId(userId);
             userPostService.createPost(userPost);
             response.put("message", "Post successfully");
-            return ResponseEntity.status(HttpStatus.OK).body(response);        
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             response.put("message", "Error creating post: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -112,7 +118,7 @@ public class UserPostController {
         }
     }
 
-    //userId refer to the user that trigger this action
+    // userId refer to the user that trigger this action
     @PostMapping("/like")
     public ResponseEntity<Map<String, Object>> likeAPost(
             @RequestBody String payload) {
@@ -127,7 +133,7 @@ public class UserPostController {
         }
     }
 
-    @PostMapping("/unlike/{postId}/by/{userId}")
+    @DeleteMapping("/unlike/{postId}/by/{userId}")
     public ResponseEntity<Map<String, Object>> unlikeAPost(@PathVariable String postId,
             @PathVariable String userId) {
         Map<String, Object> response = new HashMap<>();
@@ -139,5 +145,21 @@ public class UserPostController {
             response.put("message", "Error unliking post: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+    @GetMapping("/listuserpostings")
+    public ResponseEntity<List<UserPost>> listPostingOfUser(@RequestHeader("Authorization") String authorization,
+            @RequestParam(defaultValue = "1") String page,
+            @RequestParam(defaultValue = "20") String limit) throws NumberFormatException, Exception {
+        return ResponseEntity.ok(
+                userPostService.listUserPostByUserId(authorization, Integer.parseInt(page), Integer.parseInt(limit)));
+    }
+
+    @GetMapping("/listoflikedpost")
+    public ResponseEntity<List<UserPost>> listLikedPostOfUser(@RequestHeader("Authorization") String authorization,
+            @RequestParam(defaultValue = "1") String page,
+            @RequestParam(defaultValue = "20") String limit) throws NumberFormatException, Exception {
+        return ResponseEntity.ok(
+                userPostService.listUserPostLikedByUserId(authorization, Integer.parseInt(page), Integer.parseInt(limit)));
     }
 }

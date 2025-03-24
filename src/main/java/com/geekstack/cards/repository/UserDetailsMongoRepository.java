@@ -30,7 +30,7 @@ public class UserDetailsMongoRepository {
         mongoTemplate.insert(userDetails, C_USER);
     }
 
-    public UserDetails getOneUser(String userId){
+    public UserDetails getOneUser(String userId) {
         Query query = new Query(Criteria.where(F_USERID).is(userId));
         UserDetails user = mongoTemplate.findOne(query, UserDetails.class, C_USER);
         return user;
@@ -43,10 +43,18 @@ public class UserDetailsMongoRepository {
         mongoTemplate.updateFirst(query, update, UserDetails.class, C_USER);
     }
 
+    public void updateUnionArenaDecklist(UnionArenaDecklist decklist, String userId, String deckuid) {
+        Query query = new Query(
+                Criteria.where(F_USERID).is(userId).and(F_UADECKS).elemMatch(Criteria.where(F_DECKUID).is(deckuid)));
+        decklist.setDeckuid(deckuid);
+        Update update = new Update().set(F_UADECKS + ".$", decklist);
+        mongoTemplate.updateFirst(query, update, UserDetails.class, C_USER);
+    }
+
     public List<UnionArenaDecklist> loadUnionArenaDecklist(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where(F_USERID).is(userId));
-        query.fields().include("uadecks");
+        query.fields().include(F_UADECKS);
         UserDetails user = mongoTemplate.findOne(query, UserDetails.class, C_USER);
         if (user == null || user.getUadecks() == null) {
             return List.of();
@@ -61,10 +69,18 @@ public class UserDetailsMongoRepository {
         mongoTemplate.updateFirst(query, update, UserDetails.class, C_USER);
     }
 
+    public void updateOnePieceDecklist(OnePieceDecklist decklist, String userId, String deckuid) {
+        Query query = new Query(
+                Criteria.where(F_USERID).is(userId).and(F_OPDECKS).elemMatch(Criteria.where(F_DECKUID).is(deckuid)));
+        decklist.setDeckuid(deckuid);
+        Update update = new Update().push(F_OPDECKS, decklist);
+        mongoTemplate.updateFirst(query, update, UserDetails.class, C_USER);
+    }
+
     public List<OnePieceDecklist> loadOnePieceDecklist(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where(F_USERID).is(userId));
-        query.fields().include("opdecks");
+        query.fields().include(F_OPDECKS);
         UserDetails user = mongoTemplate.findOne(query, UserDetails.class, C_USER);
         if (user == null || user.getOpdecks() == null) {
             return List.of();
@@ -79,10 +95,18 @@ public class UserDetailsMongoRepository {
         mongoTemplate.updateFirst(query, update, UserDetails.class, C_USER);
     }
 
+    public void updateCookieRunDecklist(CookieRunDecklist decklist, String userId, String deckuid) {
+        Query query = new Query(
+                Criteria.where(F_USERID).is(userId).and(F_CRBDECKS).elemMatch(Criteria.where(F_DECKUID).is(deckuid)));
+        decklist.setDeckuid(deckuid);
+        Update update = new Update().push(F_CRBDECKS, decklist);
+        mongoTemplate.updateFirst(query, update, UserDetails.class, C_USER);
+    }
+
     public List<CookieRunDecklist> loadCookieRunDecklist(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where(F_USERID).is(userId));
-        query.fields().include("crbdecks");
+        query.fields().include(F_CRBDECKS);
         UserDetails user = mongoTemplate.findOne(query, UserDetails.class, C_USER);
         if (user == null || user.getCrbdecks() == null) {
             return List.of();
@@ -97,10 +121,18 @@ public class UserDetailsMongoRepository {
         mongoTemplate.updateFirst(query, update, UserDetails.class, C_USER);
     }
 
+    public void updateDragonballzFWDecklist(DragonballzFWDecklist decklist, String userId, String deckuid) {
+        Query query = new Query(
+                Criteria.where(F_USERID).is(userId).and(F_DBZFWDECKS).elemMatch(Criteria.where(F_DECKUID).is(deckuid)));
+        decklist.setDeckuid(deckuid);
+        Update update = new Update().push(F_DBZFWDECKS, decklist);
+        mongoTemplate.updateFirst(query, update, UserDetails.class, C_USER);
+    }
+
     public List<DragonballzFWDecklist> loadDragonballzFWDecklist(String userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where(F_USERID).is(userId));
-        query.fields().include("dbzfwdecks");
+        query.fields().include(F_DBZFWDECKS);
         UserDetails user = mongoTemplate.findOne(query, UserDetails.class, C_USER);
         if (user == null || user.getDbzfwdecks() == null) {
             return List.of();
@@ -108,9 +140,9 @@ public class UserDetailsMongoRepository {
         return user.getDbzfwdecks();
     }
 
-    public void deleteDecklist( String tcg, String userId, String deckId) {
+    public void deleteDecklist(String tcg, String userId, String deckId) {
 
-        System.out.println("Received tcg: " + tcg); 
+        System.out.println("Received tcg: " + tcg);
 
         String field = "";
         if (T_UA.trim().equals(tcg)) {

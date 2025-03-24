@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class UnionArenaCard {
 
     @Id
-    private ObjectId _id;
+    private String _id;
 
     @Field("anime")
     private String anime;
@@ -66,7 +66,7 @@ public class UnionArenaCard {
     }
     
 
-    public UnionArenaCard(ObjectId _id, String anime, String animeCode, int apcost, int banRatio, String banWith,
+    public UnionArenaCard(String _id, String anime, String animeCode, int apcost, int banRatio, String banWith,
             String basicpower, String booster, String cardId, String cardUid, String cardName, String category,
             String color, String effect, int energycost, String energygen, String image, String rarity, String traits,
             String trigger, String triggerState, String urlimage, String rarityAct, String cardcode, String priceYytId,
@@ -102,11 +102,11 @@ public class UnionArenaCard {
     }
 
 
-    public ObjectId get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(ObjectId _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 

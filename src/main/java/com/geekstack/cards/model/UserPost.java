@@ -8,10 +8,11 @@ import org.springframework.data.annotation.Id;
 public class UserPost {
 
     @Id
-    private String postId;//c
+    private String postId;
     private String postType;//c
     private String code;//c
     private String userId;//c
+    private String headline;
     private String content;//c
     private String deckName;//c
     private Boolean isTournamentDeck;//c
@@ -41,6 +42,14 @@ public class UserPost {
 
     public void setDisplaypic(String displaypic) {
         this.displaypic = displaypic;
+    }
+
+    public String getHeadline() {
+        return headline;
+    }
+
+    public void setHeadline(String headline) {
+        this.headline = headline;
     }
 
     public List<String> getListoflikes() {
@@ -138,4 +147,14 @@ public class UserPost {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        return "UserPost [postId=" + postId + ", postType=" + postType + ", code=" + code + ", userId=" + userId
+                + ", headline=" + headline + ", content=" + content + ", deckName=" + deckName + ", isTournamentDeck="
+                + isTournamentDeck + ", timestamp=" + timestamp + ", selectedCards=" + selectedCards + ", listofcards="
+                + listofcards + ", listoflikes=" + listoflikes + ", listofcomments=" + listofcomments + ", name=" + name
+                + ", displaypic=" + displaypic + "]";
+    }
+    
 }

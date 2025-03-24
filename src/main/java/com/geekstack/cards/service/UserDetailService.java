@@ -14,7 +14,6 @@ import com.geekstack.cards.model.Notification;
 import com.geekstack.cards.repository.NotificationRepository;
 import com.geekstack.cards.repository.UserDetailsMongoRepository;
 import com.geekstack.cards.repository.UserDetailsMySQLRepository;
-import com.geekstack.cards.restcontroller.UserDetailsController;
 
 @Service
 public class UserDetailService {

@@ -1,6 +1,5 @@
 package com.geekstack.cards.model;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class CookieRunCard {
 
     @Id
-    private ObjectId _id;
+    private String _id;
 
     private int id;
 
@@ -68,7 +67,7 @@ public class CookieRunCard {
     public CookieRunCard() {
     }
 
-    public CookieRunCard(ObjectId _id, int id, int elementId, String title, String artistTitle, String productTitle,
+    public CookieRunCard(String _id, int id, int elementId, String title, String artistTitle, String productTitle,
             String cardDescription, String rarity, String hp, String cardUid, String cardId, String grade,
             String urlimage, String productCategory, String productCategoryTitle, String cardType, String cardTypeTitle,
             String energyType, String energyTypeTitle, String cardLevel, String cardLevelTitle, String booster) {
@@ -113,11 +112,11 @@ public class CookieRunCard {
         this.count = count;
     }
 
-    public ObjectId get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(ObjectId _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 

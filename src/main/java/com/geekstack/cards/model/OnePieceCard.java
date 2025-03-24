@@ -1,6 +1,5 @@
 package com.geekstack.cards.model;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class OnePieceCard {
     
     @Id
-    private ObjectId _id;
+    private String _id;
 
     @Field("booster")
     private String booster;
@@ -44,7 +43,7 @@ public class OnePieceCard {
 
     }
 
-    public OnePieceCard(ObjectId _id, String booster, String cardfrom, String cardname, String cardname_lower,
+    public OnePieceCard(String _id, String booster, String cardfrom, String cardname, String cardname_lower,
             String cardId, String cardUid, String rarity, String category, String costlife, String attribute,
             String power, String counter, String color, String typing, String typing_lower, String effects,
             String trigger, String image, String urlimage) {
@@ -70,11 +69,11 @@ public class OnePieceCard {
         this.urlimage = urlimage;
     }
 
-    public ObjectId get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(ObjectId _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 

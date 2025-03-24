@@ -29,11 +29,11 @@ import com.geekstack.cards.service.FirebaseService;
 import com.geekstack.cards.service.UserDetailService;
 import com.google.firebase.auth.FirebaseToken;
 
+import jakarta.ws.rs.Path;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserDetailsController {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserDetailsController.class);
 
     @Autowired
     private UserDetailsMongoRepository userDetailsMongoRepository;
@@ -82,11 +82,15 @@ public class UserDetailsController {
 
     // Union Arena save user deck endpoint
     @PostMapping("/save/unionarena/{userId}/deck")
-    public ResponseEntity<Map<String, Object>> saveUADeck(@PathVariable String userId,
+    public ResponseEntity<Map<String, Object>> saveUADeck(@PathVariable String userId,@RequestParam(required = false) String deckuid,
             @RequestBody UnionArenaDecklist decklist) {
         Map<String, Object> response = new HashMap<>();
         try {
-            userDetailsMongoRepository.createUnionArenaDecklist(decklist, userId);
+            if (deckuid == null || deckuid.isEmpty()) {
+                userDetailsMongoRepository.createUnionArenaDecklist(decklist, userId);
+            } else {
+                userDetailsMongoRepository.updateUnionArenaDecklist(decklist, userId, deckuid);
+            }
 
             response.put("message", "Deck created successfully");
 
